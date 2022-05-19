@@ -1,11 +1,6 @@
 import React from 'react';
+import HistoricalFxData from './pages/HistoricalFxData';
 
-function App() {
-  return (
-    <div>
-      Hello World!
-    </div>
-  );
-}
+const App = () => <HistoricalFxData />;
 
 export default App;
