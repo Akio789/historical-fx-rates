@@ -1,20 +1,23 @@
 import fixerAPI from './fixerAPI';
 
 /**
- * Historical rates are available for most currencies all the way back to the year of 1999.
- * You can query the Fixer API for historical rates by appending a date (format YYYY-MM-DD)
- * to the base URL.
- * @param {string} date A date in the past for which historical rates are requested.
+ * If supported by your subscription plan, the Fixer API's timeseries endpoint lets you query
+ * the API for daily historical rates between two dates of your choice, with a maximum time
+ * frame of 365 days.
+ * @param {string} startDate (format: YYYY-MM-DD) The start date of your preferred timeframe.
+ * @param {string} endDate (format: YYYY-MM-DD) The end date of your preferred timeframe.
  * @param {string} base Enter the three-letter currency code of your preferred base currency.
- * @param {string[]} symbols Enter a list of comma-separated currency codes to limit output
+ * @param {string[]} symbols Array of currency codes to limit output.
  * currencies.
  * @returns {Object}
  */
-export const fetchHistoricalRates = async (date, base, symbols) => {
+export const fetchTimeSeries = async (startDate, endDate, base, symbols) => {
   const params = {
     base,
     symbols: symbols.join(','),
+    start_date: startDate,
+    end_date: endDate,
   };
-  const { data } = await fixerAPI.get(`/${date}`, { params });
+  const { data } = await fixerAPI.get('/timeseries', { params });
   return data;
 };

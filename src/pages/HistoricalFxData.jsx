@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import c3 from 'c3';
 import 'c3/c3.css';
-// import { fetchHistoricalRates } from '../api/fx_rates';
+import { fetchTimeSeries } from '../api/fx_rates';
 
 const HistoricalFxData = () => {
   useEffect(() => {
-    // fetchHistoricalRates('2022-01-01', 'USD', ['EUR', 'CAD']);
+    fetchTimeSeries('2022-01-01', '2022-03-03', 'USD', ['EUR', 'CAD']);
     c3.generate({
       bindto: '#historical-fx-data-chart',
       data: {
