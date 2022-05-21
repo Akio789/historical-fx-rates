@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import c3 from 'c3';
+import { Alert, Container } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'c3/c3.min.css';
 import { fetchTimeSeries } from '../../api/fx_rates';
 import { structureTimeSeriesData } from './helpers';
-import { DEFAULT_BASE_CURRENCY, DEFAULT_COMPARISON_CURRENCIES } from './constants';
+import {
+  DEFAULT_BASE_CURRENCY,
+  DEFAULT_COMPARISON_CURRENCIES,
+  ALERT_ERROR_MESSAGE,
+} from './constants';
+import Header from '../../components/header/Header';
+import styles from './HistoricalFxData.module.css';
 
 const HistoricalFxData = () => {
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(moment(new Date()).add(-1, 'months').toDate());
   const [endDate, setEndDate] = useState(new Date());
   const [timeSeriesData, setTimeSeriesData] = useState({ rates: {} });
+  const [error, setError] = useState('');
 
   const fetchAndStoreTimeSeriesData = async () => {
     const data = await fetchTimeSeries(
@@ -55,18 +63,62 @@ const HistoricalFxData = () => {
     generateChart();
   }, [timeSeriesData]);
 
+  const onStartDateChange = (date) => {
+    const dateRangeInDays = moment(endDate).diff(date, 'days');
+    if (dateRangeInDays >= 365) {
+      setError(ALERT_ERROR_MESSAGE);
+      return;
+    }
+    setError('');
+    setStartDate(date);
+  };
+
+  const onEndDateChange = (date) => {
+    const dateRangeInDays = moment(date).diff(startDate, 'days');
+    if (dateRangeInDays >= 365) {
+      setError(ALERT_ERROR_MESSAGE);
+      return;
+    }
+    setError('');
+    setEndDate(date);
+  };
+
+  const alertError = (
+    !!error && (
+      <Alert
+        variant="danger"
+        dismissible
+        onClose={() => setError('')}
+      >
+        {error}
+      </Alert>
+    )
+  );
+
   return (
     <div>
-      <div>HistoricalFxData</div>
-      <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
-      />
-      <DatePicker
-        selected={endDate}
-        onChange={(date) => setEndDate(date)}
-      />
-      <div id="historical-fx-data-chart" />
+      <Header />
+      <Container className="pt-4">
+        {alertError}
+        <div className={styles['date-pickers']}>
+          <h2>Select a date range</h2>
+          <div>
+            <p>Start date</p>
+            <DatePicker
+              selected={startDate}
+              onChange={onStartDateChange}
+            />
+          </div>
+          <div>
+            <p>End Date</p>
+            <DatePicker
+              selected={endDate}
+              onChange={onEndDateChange}
+            />
+          </div>
+        </div>
+        <div id="historical-fx-data-chart" />
+      </Container>
     </div>
   );
 };
