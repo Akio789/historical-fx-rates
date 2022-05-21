@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar } from 'react-bootstrap';
-import styles from './Header.module.css';
+import styles from './Header.module.scss';
 
 const Header = () => (
   <Navbar className={styles.header}>

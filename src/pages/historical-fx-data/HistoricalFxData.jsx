@@ -13,7 +13,7 @@ import {
   ALERT_ERROR_MESSAGE,
 } from './constants';
 import Header from '../../components/header/Header';
-import styles from './HistoricalFxData.module.css';
+import styles from './HistoricalFxData.module.scss';
 
 const HistoricalFxData = () => {
   const [startDate, setStartDate] = useState(moment(new Date()).add(-1, 'months').toDate());
