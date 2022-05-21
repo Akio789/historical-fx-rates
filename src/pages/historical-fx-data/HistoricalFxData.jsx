@@ -65,7 +65,7 @@ const HistoricalFxData = () => {
 
   const onStartDateChange = (date) => {
     const dateRangeInDays = moment(endDate).diff(date, 'days');
-    if (dateRangeInDays >= 365) {
+    if (dateRangeInDays > 365) {
       setError(ALERT_ERROR_MESSAGE);
       return;
     }
@@ -75,7 +75,7 @@ const HistoricalFxData = () => {
 
   const onEndDateChange = (date) => {
     const dateRangeInDays = moment(date).diff(startDate, 'days');
-    if (dateRangeInDays >= 365) {
+    if (dateRangeInDays > 365) {
       setError(ALERT_ERROR_MESSAGE);
       return;
     }
@@ -107,6 +107,7 @@ const HistoricalFxData = () => {
             <DatePicker
               selected={startDate}
               onChange={onStartDateChange}
+              dateFormat="yyyy-MM-dd"
             />
           </div>
           <div>
@@ -114,6 +115,7 @@ const HistoricalFxData = () => {
             <DatePicker
               selected={endDate}
               onChange={onEndDateChange}
+              dateFormat="yyyy-MM-dd"
             />
           </div>
         </div>
