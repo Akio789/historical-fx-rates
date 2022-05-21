@@ -32,7 +32,21 @@ const HistoricalFxData = () => {
     c3.generate({
       bindto: '#historical-fx-data-chart',
       data: {
+        x: 'x',
+        xFormat: '%Y-%m-%d',
         columns: structuredData,
+      },
+      axis: {
+        x: {
+          type: 'timeseries',
+          tick: {
+            format: '%Y-%m-%d',
+          },
+          label: 'Dates',
+        },
+        y: {
+          label: 'USD Conversion Rate',
+        },
       },
     });
   };
